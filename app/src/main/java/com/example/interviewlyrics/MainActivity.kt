@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.simpleName
 
         private const val FEELING_GOOD = "feeling-good.ttml"
-
-
-        private val TTML_ASSET = FEELING_GOOD
     }
 
     private lateinit var mLyricsVM: LyricsViewModel
@@ -78,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         mBinding.lyricsMainContent.adapter = mAdapter
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val stream = BufferedInputStream(assets.open(TTML_ASSET))
+            val stream = BufferedInputStream(assets.open(FEELING_GOOD))
             val lyricsList = ParserFactory.createParser().parse(stream)
 
             Log.i(TAG, "onStart(): lyric lines: ${lyricsList.joinToString("\n")}")
