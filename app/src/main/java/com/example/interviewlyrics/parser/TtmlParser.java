@@ -1,6 +1,7 @@
 package com.example.interviewlyrics.parser;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.interviewlyrics.model.P;
 
@@ -20,5 +21,6 @@ public interface TtmlParser {
      * @return a {@link Date} representing that time. The input string will contain ONLY a time, so
      * an undefined date portion in the returned {@link Date} object is acceptable
      */
+    @Nullable
     Date convertToTime(@NonNull String timeStr);
 }
