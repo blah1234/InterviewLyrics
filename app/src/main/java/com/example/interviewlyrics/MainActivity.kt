@@ -76,37 +76,49 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             val stream = BufferedInputStream(assets.open(FEELING_GOOD))
-            val lyricsList = ParserFactory.createParser().parse(stream)
+            val lyricsList = ParserFactory.createParser()?.parse(stream)
 
-            Log.i(TAG, "onStart(): lyric lines: ${lyricsList.joinToString("\n")}")
-            mLyricsVM.onLyricsAvailable(lyricsList)
+            Log.i(TAG, "onStart(): lyric lines: ${lyricsList?.joinToString("\n")}")
+
+            if (lyricsList != null) {
+                mLyricsVM.onLyricsAvailable(lyricsList)
+            }
         }
     }
 
     override fun onStop() {
         super.onStop()
 
-        mScheduler.cancel()
+        mScheduler?.cancel()
         mBinding.lyricsMainContent.swapAdapter(null, true)
     }
 
     private fun scheduleLyricLines(lines: List<P>) {
         val parser = ParserFactory.createParser()
-        val refTime = parser.convertToTime("00:00:00.000")
 
-        lines.forEachIndexed { index, lyricLine ->
-            val absBegin = parser.convertToTime(lyricLine.begin)
-            val beginMillis = absBegin.time - refTime.time
+        if (parser != null) {
+            val refTime = parser.convertToTime("00:00:00.000")
 
-            Log.i(TAG, "scheduleLyricLines(): seconds: ${beginMillis / 1000f}     $lyricLine")
+            lines.forEachIndexed { index, lyricLine ->
+                val absBegin = parser.convertToTime(lyricLine.begin)
+                val beginMillis = if (absBegin != null && refTime != null) {
+                    absBegin.time - refTime.time
+                } else {
+                    0
+                }
 
-            val task = Runnable {
-                mHandler.post {
-                    setHighlightedLinePosition(index, beginMillis)
+                Log.i(TAG, "scheduleLyricLines(): seconds: ${beginMillis / 1000f}     $lyricLine")
+
+                if (mScheduler != null) {
+                    val task = Runnable {
+                        mHandler.post {
+                            setHighlightedLinePosition(index, beginMillis)
+                        }
+                    }
+
+                    mScheduler.schedule(task, beginMillis)
                 }
             }
-
-            mScheduler.schedule(task, beginMillis)
         }
     }
 
