@@ -78,7 +78,7 @@ class TtmlXmlPullParser : TtmlParser {
     }
 
 
-    override fun convertToTime(timeStr: String): Date {
+    override fun convertToTime(timeStr: String): Date? {
         val timeFormat = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).apply {
             isLenient = true
         }
