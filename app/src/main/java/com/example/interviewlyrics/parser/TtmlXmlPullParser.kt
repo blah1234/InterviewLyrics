@@ -85,4 +85,8 @@ class TtmlXmlPullParser : TtmlParser {
 
         return timeFormat.parse(timeStr)
     }
+
+    override fun convertToMillis(timeStr: String): Long? {
+        return null
+    }
 }

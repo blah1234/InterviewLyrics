@@ -23,4 +23,11 @@ public interface TtmlParser {
      */
     @Nullable
     Date convertToTime(@NonNull String timeStr);
+
+    /**
+     * @param timeStr a string in the form of `HH:mm:ss.SSS`
+     * @return the number of milliseconds represented by by the time string
+     */
+    @Nullable
+    Long convertToMillis(@NonNull String timeStr);
 }
