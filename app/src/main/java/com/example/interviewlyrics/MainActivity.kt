@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                 val beginMillis = if (absBegin != null && refTime != null) {
                     absBegin.time - refTime.time
                 } else {
-                    0
+                    parser.convertToMillis(lyricLine.begin) ?: 0
                 }
 
                 Log.i(TAG, "scheduleLyricLines(): seconds: ${beginMillis / 1000f}     $lyricLine")
